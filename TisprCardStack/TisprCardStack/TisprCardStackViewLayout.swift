@@ -293,9 +293,9 @@ open class CardStackViewLayout: UICollectionViewLayout, UIGestureRecognizerDeleg
             }
             initialCellCenter = collectionView?.cellForItem(at: draggedCellPath!)?.center
             
-            //workaround for fix issue with zIndex
-            let cell = collectionView!.cellForItem(at: draggedCellPath!)
-            collectionView?.bringSubview(toFront: cell!)
+            //COGZUM: crash: workaround for fix issue with zIndex
+            //let cell = collectionView!.cellForItem(at: draggedCellPath!)
+            //collectionView?.bringSubview(toFront: cell!)
             
         }
     }
