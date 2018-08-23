@@ -28,7 +28,12 @@ open class CardStackViewLayout: UICollectionViewLayout, UIGestureRecognizerDeleg
     var index: Int = 0 {
         didSet {
             //workaround for zIndex
-            draggedCellPath = oldValue > index ? IndexPath(item: index, section: 0) : IndexPath(item: oldValue, section: 0)
+            if oldValue > index {
+                draggedCellPath = IndexPath(item: index, section: 0)
+            } else {
+                draggedCellPath = IndexPath(item: oldValue, section: 0)
+            }
+            
             guard let cell = collectionView!.cellForItem(at: draggedCellPath!) else {
                 return
             }
@@ -239,23 +244,9 @@ open class CardStackViewLayout: UICollectionViewLayout, UIGestureRecognizerDeleg
     }
 
     // MARK: - Handling the Swipe and Pan Gesture
-    
     @objc internal func handleSwipe(_ sender: UISwipeGestureRecognizer) {
-        switch sender.direction {
-        case UISwipeGestureRecognizerDirection.up:
-            // Take the card at the current index
-            // and process the swipe up only if it occurs below it
-//            var temIndex = index
-//            if temIndex >= collectionView!.numberOfItemsInSection(0) {
-//                temIndex--
-//            }
-//            let currentCard = collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: temIndex , inSection: 0))!
-//            let point = sender.locationInView(collectionView)
-//            if (point.y > CGRectGetMaxY(currentCard.frame) && index > 0) {
-            if index > 0 {
-                index -= 1
-            }
-//            }
+        switch sender.direction
+        {
         case UISwipeGestureRecognizerDirection.down:
             if index + 1 < collectionView!.numberOfItems(inSection: 0) {
                 index += 1
@@ -292,11 +283,6 @@ open class CardStackViewLayout: UICollectionViewLayout, UIGestureRecognizerDeleg
                 }
             }
             initialCellCenter = collectionView?.cellForItem(at: draggedCellPath!)?.center
-            
-            //COGZUM: crash: workaround for fix issue with zIndex
-            //let cell = collectionView!.cellForItem(at: draggedCellPath!)
-            //collectionView?.bringSubview(toFront: cell!)
-            
         }
     }
     
